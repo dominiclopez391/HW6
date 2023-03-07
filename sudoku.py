@@ -15,7 +15,8 @@ q3:  Backtracking Search with MRV Ordering and AC-3
 import csp
 
 # Enter your helper functions here
-
+def constraint(var1, val1, var2, val2):
+    return val1 != val2
 
 def build_csp(puzzle):
     """
@@ -24,27 +25,15 @@ def build_csp(puzzle):
     (row, column) representing the filled puzzle squares and the values
     are the corresponding numbers assigned to these squares.
     :return: Csp object
-
-    domains: a dictionary representing variables and their domains.
-        The dictionary keys are variable names and the values are sets
-        representing their domains.
-    neighbors: a dictionary representing binary constraints.
-        The dictionary keys are variable names and the values are sets
-        containing all the variables that are connected to the key.
-        (Variables are connected if they both appear in a constraint)
-    constraint: a function that takes as arguments two variables
-        and two values: f(var1, val1, var2, val2).
-        The function returns True if var1 and var2 satisfy the
-        constraint when their respective values are val1 and val2.
     """
-
+    # Enter your code here and remove the pass statement below
     dictForCSP = {}
     for i in range(9):
         for j in range(9):
             if not (i, j) in puzzle:
-                dictForCSP[(i, j)] = range(9)
+                dictForCSP[(i, j)] = {1, 2, 3, 4, 5, 6, 7, 8, 9}
             else:
-                dictForCSP[(i, j)] = puzzle[(i, j)]
+                dictForCSP[(i, j)] = {puzzle[(i, j)]}
 
     neighborsForCSP = {}
     for i in range(9):
@@ -58,7 +47,7 @@ def build_csp(puzzle):
                 for l in range(3):
 
                     #get every element in the corresponding 3x3 sudoku grid area for each variable
-                    connectedVar = (((i - 1) // 3) * 3 + k, ((j - 1) // 3) * 3 + l);
+                    connectedVar = ((i // 3) * 3 + k, (j // 3) * 3 + l);
                     if connectedVar != (i, j):
                         neighborsForCSP[(i, j)].add(connectedVar)
 
@@ -71,7 +60,10 @@ def build_csp(puzzle):
             for k in range(9):
                 if not (i, j) == (i, k) and not (i, k) in neighborsForCSP[(i, j)]:
                     neighborsForCSP[(i, j)].add((i, k))
-    pass
+
+    print(neighborsForCSP)
+
+    return csp.Csp(dictForCSP, neighborsForCSP, constraint)
 
 
 def q1(puzzle):
@@ -83,8 +75,8 @@ def q1(puzzle):
     :return: a tuple consisting of a solution (dictionary) and the
     Csp object.
     """
-    # Enter your code here and remove the pass statement below
-    pass
+    cspForQ1 = build_csp(puzzle)
+    return (cspForQ1.backtracking_search(), cspForQ1)
 
 
 def q2(puzzle):
@@ -98,7 +90,9 @@ def q2(puzzle):
     Csp object.
     """
     # Enter your code here and remove the pass statement below
-    pass
+    cspForQ1 = build_csp(puzzle)
+    cspForQ1.ac3_algorithm()
+    return (cspForQ1.backtracking_search(), cspForQ1)
 
 
 def q3(puzzle):
@@ -112,4 +106,6 @@ def q3(puzzle):
     Csp object.
     """
     # Enter your code here and remove the pass statement below
-    pass
+    cspForQ1 = build_csp(puzzle)
+    cspForQ1.ac3_algorithm()
+    return (cspForQ1.backtracking_search("MRV"), cspForQ1)
