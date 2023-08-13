@@ -61,8 +61,6 @@ def build_csp(puzzle):
                 if not (i, j) == (i, k) and not (i, k) in neighborsForCSP[(i, j)]:
                     neighborsForCSP[(i, j)].add((i, k))
 
-    print(neighborsForCSP)
-
     return csp.Csp(dictForCSP, neighborsForCSP, constraint)
 
 
